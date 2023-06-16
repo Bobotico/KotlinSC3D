@@ -11,10 +11,23 @@ import retrofit2.Retrofit
 import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
 
-class SyncronizationModule {
+class SyncronizationModule private constructor(){
+
+    private var currentSession : SessionModel? = null
+    private var projects : ProjectModel? = null
+
+    companion object {
+
+        @Volatile
+        private var instance: SyncronizationModule? = null
+
+        fun getInstance() =
+            instance ?: synchronized(this) {
+                instance ?: SyncronizationModule().also { instance = it }
+            }
+    }
 
     var client : ISC3DAPI?
-
     init {
         client = Retrofit.Builder()
             .baseUrl("https://cloud17.smartcity3d.com/api/")
@@ -63,6 +76,7 @@ class SyncronizationModule {
             if (response != null && response.isSuccessful) {
                 println("Response " + Gson().toJson(response.body()))
                 loginResult = response.body()
+                currentSession = response.body()
             } else {
                 println("Response fail : " + response?.code())
             }
@@ -75,8 +89,6 @@ class SyncronizationModule {
 
     fun getProjectList() : ProjectModel? {
 
-        val currentSession : ProjectModel? = null
-        var projects : ProjectModel? = null
         if (currentSession != null) {
             client?.getProjects(currentSession!!.SessionID)
                 ?.enqueue(object : Callback<ProjectModel> {
