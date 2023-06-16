@@ -1,11 +1,24 @@
 package com.example.smartcity3dar
 
+import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.View.VISIBLE
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.EditText
+import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -19,6 +32,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var webView: WebView
+
+    private var GFG_URI = "https://www.geeksforgeeks.org"
+    private var package_name = "com.android.chrome";
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +60,39 @@ class MainActivity : AppCompatActivity() {
                 loginViewModel.login(inputUN, inputPass)
             }
         }
+
+        val registerButton : Button = findViewById(R.id.registerButton)
+        registerButton.setOnClickListener{
+            // Create a new WebView instance
+             /*webView = WebView(this)
+
+            // Configure the WebView
+            webView.settings.javaScriptEnabled = true
+            webView.webViewClient = WebViewClient()
+            webView.loadUrl("https://www.google.com/")
+
+            setContentView(webView)*/
+
+            webView = WebView(this)
+            webView.visibility = VISIBLE
+            webView.settings.javaScriptEnabled = true
+            webView.canGoBack()
+            webView.loadUrl("https://www.google.com/")
+            setContentView(webView)
+        }
+
+        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if(webView.isVisible){
+                    webView.goBack()
+                    setContentView(binding.root)
+                }else{
+                    onBackPressed()
+                }
+            }
+
+        })
+
         /*val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
