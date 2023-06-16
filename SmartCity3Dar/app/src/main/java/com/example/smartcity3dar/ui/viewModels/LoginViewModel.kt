@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
 
-    val synchronizationModule = SyncronizationModule()
+    val synchronizationModule = SyncronizationModule.getInstance()
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is home Fragment"
