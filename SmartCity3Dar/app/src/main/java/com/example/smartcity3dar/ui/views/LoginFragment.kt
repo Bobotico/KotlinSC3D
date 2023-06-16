@@ -10,11 +10,16 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.smartcity3dar.databinding.FragmentLoginBinding
+import com.example.smartcity3dar.databinding.ModalLoginBinding
 import com.example.smartcity3dar.ui.models.SessionModel
+import com.example.smartcity3dar.ui.models.SyncronizationModule
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
-    private var _binding: FragmentLoginBinding? = null
+    private var _binding: ModalLoginBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -28,7 +33,7 @@ class LoginFragment : Fragment() {
         val loginViewModel =
             ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = ModalLoginBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val userNameTF: EditText = binding.userNameTF
         val passTF: EditText = binding.passwordTF
@@ -37,7 +42,10 @@ class LoginFragment : Fragment() {
             val inputUN = userNameTF.text.toString()
             val inputPass = passTF.text.toString()
             loginViewModel.login(inputUN, inputPass)
+
         }
+
+
         return root
     }
 

@@ -10,6 +10,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 
 class SyncronizationModule private constructor(){
 
@@ -87,7 +88,42 @@ class SyncronizationModule private constructor(){
         loginResult
     }
 
-    fun getProjectList() : ProjectModel? {
+    suspend fun getAssets(sessionID : String) : AssetModel? = withContext(Dispatchers.IO){
+
+        var assets: AssetModel? = null
+
+        try {
+            if (currentSession != null) {
+                client?.getAssets(sessionID, 1)?.enqueue(object  : Callback<AssetModel> {
+                    override fun onResponse(
+                        call: Call<AssetModel>,
+                        response: Response<AssetModel>
+                    ) {
+                        if(response.isSuccessful){
+                            assets = response.body()
+                            response.body().let {
+                                if (it != null) {
+                                    for (asset in it.Data) {
+                                        println(asset.Name)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<AssetModel>, t: Throwable) {
+                        println("Errore lista asset : " + t.message)
+                    }
+
+                })
+            }
+        }catch (e : Exception) {
+
+        }
+        assets
+    }
+
+    suspend fun getProjectList() : ProjectModel? = withContext(Dispatchers.IO) {
 
         if (currentSession != null) {
             client?.getProjects(currentSession!!.SessionID)
@@ -115,6 +151,6 @@ class SyncronizationModule private constructor(){
                 })
         }
 
-        return projects
+        projects
     }
 }

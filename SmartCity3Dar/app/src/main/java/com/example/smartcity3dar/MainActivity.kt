@@ -3,14 +3,17 @@ package com.example.smartcity3dar
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.smartcity3dar.databinding.ActivityMainBinding
 import com.example.smartcity3dar.databinding.ModalLoginBinding
+import com.example.smartcity3dar.ui.home.LoginViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +25,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        val loginViewModel =
+            ViewModelProvider(this).get(LoginViewModel::class.java)
         val signInButton: Button = findViewById(R.id.signInButton)
 
         signInButton.setOnClickListener {
@@ -30,6 +34,14 @@ class MainActivity : AppCompatActivity() {
             val modal = BottomSheetDialog(this)
             modal.setContentView(view)
             modal.show()
+            val userNameTF: EditText? = modal.findViewById(R.id.userNameTF)
+            val passTF: EditText? = modal.findViewById(R.id.passwordTF)
+            val loginButton: Button? = modal.findViewById(R.id.loginButton)
+            loginButton?.setOnClickListener {
+                val inputUN = userNameTF?.text.toString()
+                val inputPass = passTF?.text.toString()
+                loginViewModel.login(inputUN, inputPass)
+            }
         }
         /*val navView: BottomNavigationView = binding.navView
 

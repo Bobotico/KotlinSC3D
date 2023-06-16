@@ -1,11 +1,13 @@
 package com.example.smartcity3dar.ui.utilities.networking
 
+import com.example.smartcity3dar.ui.models.AssetModel
 import com.example.smartcity3dar.ui.models.ProjectModel
 import com.example.smartcity3dar.ui.models.SessionModel
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ISC3DAPI {
@@ -14,4 +16,7 @@ interface ISC3DAPI {
 
         @GET("projects/get")
         fun getProjects(@Header("x-SessionId") sessionId : String) : Call<ProjectModel>
+
+        @GET("project/{projectID}/assets/get")
+        fun getAssets(@Header("x-SessionId") sessionId: String, @Path("projectID") projectID: Int): Call<AssetModel>
 }
