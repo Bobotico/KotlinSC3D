@@ -1,4 +1,4 @@
-package com.example.smartcity3dar.ui.models
+package com.example.smartcity3dar.models
 
 import com.google.gson.annotations.SerializedName
 

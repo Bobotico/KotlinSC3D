@@ -1,8 +1,8 @@
-package com.example.smartcity3dar.ui.utilities.networking
+package com.example.smartcity3dar.networking
 
-import com.example.smartcity3dar.ui.models.AssetModel
-import com.example.smartcity3dar.ui.models.ProjectModel
-import com.example.smartcity3dar.ui.models.SessionModel
+import com.example.smartcity3dar.models.AssetModel
+import com.example.smartcity3dar.models.ProjectModel
+import com.example.smartcity3dar.models.SessionModel
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

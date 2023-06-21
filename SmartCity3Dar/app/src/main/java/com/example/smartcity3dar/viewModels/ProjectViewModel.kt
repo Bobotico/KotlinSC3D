@@ -1,8 +1,8 @@
-package com.example.smartcity3dar.ui.viewModels
+package com.example.smartcity3dar.viewModels
 
 import android.view.contentcapture.ContentCaptureSessionId
 import androidx.lifecycle.ViewModel
-import com.example.smartcity3dar.ui.models.SyncronizationModule
+import com.example.smartcity3dar.models.SyncronizationModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

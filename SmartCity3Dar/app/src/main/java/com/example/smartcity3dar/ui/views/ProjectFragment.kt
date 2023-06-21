@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.smartcity3dar.databinding.AvailableProjectsBinding
 import com.example.smartcity3dar.databinding.ModalLoginBinding
 import com.example.smartcity3dar.ui.home.LoginViewModel
-import com.example.smartcity3dar.ui.viewModels.ProjectViewModel
+import com.example.smartcity3dar.viewModels.ProjectViewModel
 
 
 class ProjectFragment : Fragment() {

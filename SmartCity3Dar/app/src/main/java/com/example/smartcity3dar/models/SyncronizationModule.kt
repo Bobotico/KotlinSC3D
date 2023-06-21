@@ -1,6 +1,6 @@
-package com.example.smartcity3dar.ui.models
+package com.example.smartcity3dar.models
 
-import com.example.smartcity3dar.ui.utilities.networking.ISC3DAPI
+import com.example.smartcity3dar.networking.ISC3DAPI
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -68,7 +68,7 @@ class SyncronizationModule private constructor(){
         return loginResult
     }*/
 
-    suspend fun loginAsync(username: String, password: String): SessionModel? = withContext(
+    suspend fun login(username: String, password: String): SessionModel? = withContext(
         Dispatchers.IO) {
         var loginResult: SessionModel? = null
 

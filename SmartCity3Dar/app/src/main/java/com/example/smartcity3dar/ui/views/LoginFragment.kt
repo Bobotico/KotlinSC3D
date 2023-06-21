@@ -11,12 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.smartcity3dar.databinding.FragmentLoginBinding
 import com.example.smartcity3dar.databinding.ModalLoginBinding
-import com.example.smartcity3dar.ui.models.SessionModel
-import com.example.smartcity3dar.ui.models.SyncronizationModule
+import com.example.smartcity3dar.models.SessionModel
+import com.example.smartcity3dar.models.SyncronizationModule
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private var _binding: ModalLoginBinding? = null

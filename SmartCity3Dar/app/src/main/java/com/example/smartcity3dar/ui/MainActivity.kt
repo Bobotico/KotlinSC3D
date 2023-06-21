@@ -1,41 +1,26 @@
-package com.example.smartcity3dar
+package com.example.smartcity3dar.ui
 
-import android.app.Activity
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.View.VISIBLE
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.RequiresApi
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import com.example.smartcity3dar.R
 import com.example.smartcity3dar.databinding.ActivityMainBinding
-import com.example.smartcity3dar.databinding.ModalLoginBinding
 import com.example.smartcity3dar.ui.home.LoginViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var webView: WebView
-
-    private var GFG_URI = "https://www.geeksforgeeks.org"
-    private var package_name = "com.android.chrome";
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
