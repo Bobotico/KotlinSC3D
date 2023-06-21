@@ -13,7 +13,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
+        minSdkVersion 21
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -55,4 +55,7 @@ dependencies {
 
     // Json Converter / Serializer
     implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
+
+    // MapBox
+    implementation 'com.mapbox.maps:android:10.14.0'
 }
