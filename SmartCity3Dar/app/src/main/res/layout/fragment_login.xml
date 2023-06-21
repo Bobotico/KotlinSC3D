@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_margin="10dp"
-            android:background="@drawable/ic_myborder"
+            android:background="@drawable/myBorder"
             android:hint="Email"
             android:textColor="@color/digicolor"
             android:text="francesco.paciello@digitarca.it" />
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_margin="10dp"
-            android:background="@drawable/ic_myborder"
+            android:background="@drawable/myBorder"
             android:textColor="@color/digicolor"
             android:text="Testunityar"
             android:hint="Password" />
