@@ -37,15 +37,6 @@ class LoginFragment : Fragment() {
 
         _binding = ModalLoginBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        val userNameTF: EditText = binding.userNameTF
-        val passTF: EditText = binding.passwordTF
-        val loginButton: Button = binding.loginButton
-        loginButton.setOnClickListener {
-            val inputUN = userNameTF.text.toString()
-            val inputPass = passTF.text.toString()
-            loginViewModel.login(inputUN, inputPass)
-
-        }
 
 
         return root

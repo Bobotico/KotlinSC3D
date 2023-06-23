@@ -1,4 +1,4 @@
-package com.example.smartcity3dar.ui.views
+package com.example.smartcity3dar.views
 
 import android.os.Bundle
 import android.view.LayoutInflater

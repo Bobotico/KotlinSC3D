@@ -3,13 +3,19 @@ package com.example.smartcity3dar.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.smartcity3dar.models.SessionModel
 import com.example.smartcity3dar.models.SyncronizationModule
 import com.example.smartcity3dar.repository.MainRepository
 import com.example.smartcity3dar.services.DataCache
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,11 +29,9 @@ class LoginViewModel @Inject constructor(
     }
     val text: LiveData<String> = _text
 
-    fun login(username: String, password : String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            val loginResult = repository.login(username, password)
-            // Process the loginResult here
-            println("Accesso effettuato con id : " + dataCache.currentSession?.SessionID)
+    suspend fun login(username: String, password : String) : SessionModel =
+        withContext(Dispatchers.Default) {
+            var loginResult = repository.login(username, password)
+            return@withContext loginResult!!
         }
-    }
 }

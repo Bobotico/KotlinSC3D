@@ -23,7 +23,7 @@ class DefaultMainRepository @Inject constructor(
         var loginResult: SessionModel? = null
 
         try {
-            val response = sc3dAPI?.login("francesco.paciello@digitarca.it", "Testunityar")?.awaitResponse()
+            val response = sc3dAPI?.login(username, password)?.awaitResponse()
             if (response != null && response.isSuccessful) {
                 println("Response " + Gson().toJson(response.body()))
                 loginResult = response.body()
