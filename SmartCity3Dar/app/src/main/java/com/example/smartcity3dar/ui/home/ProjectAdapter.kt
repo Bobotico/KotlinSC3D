@@ -1,38 +1,48 @@
 package com.example.smartcity3dar.ui.home
 
-import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import androidx.annotation.Nullable;
 import com.example.smartcity3dar.R
 import com.example.smartcity3dar.models.ProjectData
+import java.util.ArrayList;
 
-class ProjectAdapter(private val context: Context,
-                     private val dataSource: ArrayList<ProjectData>) : BaseAdapter() {
+class ProjectAdapter  // invoke the suitable constructor of the ArrayAdapter class
+    (context: Context, arrayList: ArrayList<ProjectData>) :
+    ArrayAdapter<ProjectData>(context, 0, arrayList) {
+    override fun getView(position: Int, @Nullable convertView: View?, parent: ViewGroup): View {
 
-    private val inflater: LayoutInflater
-            = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        // convertView which is recyclable view
+        var currentItemView = convertView
 
-    override fun getCount(): Int {
-        return dataSource.size
-    }
+        // of the recyclable view is null then inflate the custom layout for the same
+        if (currentItemView == null) {
+            currentItemView =
+                LayoutInflater.from(context).inflate(R.layout.fragment_project_list_item, parent, false)
+        }
 
-    //2
-    override fun getItem(position: Int): Any {
-        return dataSource[position]
-    }
+        // get the position of the view from the ArrayAdapter
+        val currentProject: ProjectData? = getItem(position)
 
-    //3
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
+        println(currentProject)
+        // then according to the position of the view assign the desired TextView 1 for the same
+        val textView1 = currentItemView!!.findViewById<TextView>(R.id.projectName)
+        textView1.setText(currentProject?.Name)
 
-    //4
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        // Get view for row item
-        val rowView = inflater.inflate(R.layout.fragment_project_list_item, parent, false)
+        // then according to the position of the view assign the desired TextView 1 for the same
+        val textView2 = currentItemView!!.findViewById<TextView>(R.id.layer)
+        textView2.setText(currentProject?.Description)
 
-        return rowView
+        // then according to the position of the view assign the desired TextView 1 for the same
+        val textView3 = currentItemView!!.findViewById<TextView>(R.id.distance)
+        textView3.setText(currentProject?.Id.toString())
+
+
+        // then return the recyclable view
+        return currentItemView
     }
 }

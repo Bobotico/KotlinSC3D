@@ -22,4 +22,6 @@ data class ProjectData(
     var Description : String,
     @SerializedName("LocationWGS84")
     var LocationWGS84 : String,
+    @SerializedName("LayerId")
+    var LayerId : Int,
 )

@@ -1,15 +1,12 @@
 package com.example.smartcity3dar.ui.home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.SearchView
-import androidx.core.view.contains
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -24,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.concurrent.thread
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -41,9 +37,9 @@ class HomeFragment : Fragment() {
 
     private lateinit var listView : ListView
 
-    private lateinit var projectNames : ArrayList<String>
+    private lateinit var projectDataLoaded : ArrayList<ProjectData>
 
-    private lateinit var adapter : ArrayAdapter<String>
+    private lateinit var adapter : ProjectAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,7 +56,12 @@ class HomeFragment : Fragment() {
         val refreshButton : FloatingActionButton = root.findViewById(R.id.refreshButton)
         searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if(projectNames.contains(query)) {
+                if(projectDataLoaded.filter {
+                        it.Name.contains(
+                            query.toString(),
+                            ignoreCase = true
+                        )
+                    }.isNotEmpty()) {
                     adapter.filter.filter(query)
                 }else{
                     println("No query eligible")
@@ -98,13 +99,13 @@ class HomeFragment : Fragment() {
 
     suspend fun fillProjectList(projectList : ProjectModel?) = withContext(Dispatchers.Main){
         if(projectList != null){
-            projectNames = ArrayList()
+            projectDataLoaded = ArrayList()
 
             for(project in projectList!!.Data){
                 // Creazione pulsanti progetti.
-                projectNames.add(project.Name)
+                projectDataLoaded.add(project)
             }
-            adapter = ArrayAdapter<String>(requireView().context, android.R.layout.simple_list_item_1, projectNames)
+            adapter = ProjectAdapter(requireView().context, projectDataLoaded)
             listView.adapter = adapter
         }
     }
