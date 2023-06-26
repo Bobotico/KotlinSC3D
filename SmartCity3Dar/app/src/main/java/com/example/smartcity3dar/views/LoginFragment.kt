@@ -38,7 +38,6 @@ class LoginFragment : Fragment() {
         _binding = ModalLoginBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
         return root
     }
 

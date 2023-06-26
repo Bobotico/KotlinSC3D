@@ -73,35 +73,23 @@ class DefaultMainRepository @Inject constructor(
         assets
     }
 
-    override suspend fun getProjectList(): ProjectModel? {
+    override suspend fun getProjectList(): ProjectModel? = withContext(Dispatchers.IO) {
 
-        var result : ProjectModel? = null
-        if(dataCache.currentSession != null){
-            sc3dAPI?.getProjects(dataCache.currentSession!!.SessionID)
-                ?.enqueue(object : Callback<ProjectModel> {
-                    override fun onResponse(
-                        call: Call<ProjectModel>,
-                        response: Response<ProjectModel>
-                    ) {
-                        if (response.isSuccessful) {
-                            result = response.body()
-                            dataCache.projects = response.body()
-                            response.body().let {
-                                if (it != null) {
-                                    for (project in it.Data) {
-                                        println(project.Name)
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ProjectModel>, t: Throwable) {
-                        println("Errore lista progetti : " + t.message)
-                    }
-
-                })
+        var result: ProjectModel? = null
+        try {
+            if (dataCache.currentSession != null) {
+                val response =
+                    sc3dAPI?.getProjects(dataCache.currentSession!!.SessionID)?.awaitResponse()
+                if (response != null && response.isSuccessful) {
+                    result = response.body()
+                    dataCache.projects = response.body()
+                } else {
+                    println("Errore nel caricamento dei progetti : ${response?.code()}")
+                }
+            }
+        } catch (e: Exception) {
+            println("Eccezzione : ${e.message}")
         }
-        return result
+        result
     }
 }
