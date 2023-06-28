@@ -2,38 +2,43 @@ package com.example.smartcity3dar.ui.dashboard
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.smartcity3dar.R
 import com.example.smartcity3dar.databinding.FragmentDashboardBinding
 import com.example.smartcity3dar.views.MapMarker
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.ar.core.Anchor
+import com.google.ar.core.Config
+import com.google.ar.core.HitResult
+import io.github.sceneview.ar.ArSceneView
+import io.github.sceneview.ar.node.ArModelNode
+import io.github.sceneview.gesture.NodeMotionEvent
+import io.github.sceneview.math.Position
+import io.github.sceneview.renderable.Renderable
 import org.json.JSONException
 import org.json.JSONObject
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.MapTileProviderBasic
-import org.osmdroid.tileprovider.tilesource.ITileSource
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.CopyrightOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.TilesOverlay
+import java.lang.Exception
+import kotlin.random.Random
 
 class DashboardFragment : Fragment() {
 
@@ -46,6 +51,11 @@ class DashboardFragment : Fragment() {
     lateinit var map: MapView
     lateinit var mapController: IMapController
     val coordinates = mutableListOf<GeoPoint>()
+
+    lateinit var sceneView: ArSceneView
+    lateinit var placeButton: ExtendedFloatingActionButton
+    lateinit var modelNode: ArModelNode
+    //lateinit var cursorNode: CursorNode
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -139,8 +149,79 @@ class DashboardFragment : Fragment() {
 
         map.overlays.add(itemizedIconOverlay)
 
-        map.invalidate() // Invalidate the map view to redraw the overlay
+        // Invalidate the map view to redraw the overlay
+        map.invalidate()
+
+
+        placeButton = binding.place
+
+        // AR
+        sceneView = binding.sceneView.apply {
+            planeRenderer.isVisible = true
+
+            onArSessionFailed = { _: Exception ->
+                // If AR is not available or the camara permission has been denied, we add the model
+                // directly to the scene for a fallback 3D only usage
+                modelNode.centerModel(origin = Position(x = 0.0f, y = 0.0f, z = 0.0f))
+                modelNode.scaleModel(units = 1.0f)
+                sceneView.addChild(modelNode)
+            }
+            onTapAr = { hitResult, _ ->
+                anchorOrMove(hitResult.createAnchor())
+            }
+        }
+
+/*        cursorNode = CursorNode().apply {
+            onHitResult = { node, _ ->
+            }
+        }
+        sceneView.addChild(cursorNode)*/
+
+
+        sceneView.depthEnabled = true
+        sceneView.isDepthOcclusionEnabled = true
+        sceneView.depthMode = Config.DepthMode.AUTOMATIC
+
+        placeButton.setOnClickListener {
+            placeModel()
+        }
+
+        modelNode = ArModelNode(
+            modelGlbFileLocation = "models/digitarca_model.glb",
+            onLoaded = { modelInstance ->
+
+            })
+
+        modelNode.onTap = {motionEvent: MotionEvent, i: Renderable? -> modelNode.isPositionEditable = !modelNode.isPositionEditable}
+
+/*        modelNode = ArModelNode().apply {
+            loadModelGlbAsync(
+                glbFileLocation = "models/digitarca_model.glb"
+            )
+            {
+                sceneView.planeRenderer.isVisible = true
+            }
+            onAnchorChanged = {
+                placeButton.isGone
+            }
+        }*/
+
+
+
         return root
+    }
+
+    fun anchorOrMove(anchor: Anchor) {
+        if (!sceneView.children.contains(modelNode)) {
+            sceneView.addChild(modelNode)
+        }
+
+        modelNode.anchor = anchor
+    }
+
+    // funzione per piazzare il modello 3d nello spazio
+    private fun placeModel() {
+            modelNode.anchor()
     }
 
     private fun resizeMarkerIcon(markerIcon: Drawable, width: Int, height: Int): Drawable {
